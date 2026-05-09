@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(lsof -i :3000 2>/dev/null | head -5; echo \"---\"; lsof -i :5173 2>/dev/null | head -5)",
+      "Bash(curl -s http://localhost:5173 | head -30)",
+      "Bash(curl -s http://localhost:3000/api/settings 2>&1 | head -20)",
+      "Bash(curl -s http://localhost:5173/src/main.jsx 2>&1 | head -20)",
+      "Bash(curl -s http://localhost:5173/src/App.jsx 2>&1 | head -5)",
+      "Bash(curl -s http://localhost:5173/src/components/Calculator.jsx 2>&1 | grep -i \"error\\\\|Error\\\\|ERR\" | head -5)",
+      "Bash(curl -s http://localhost:5173/src/App.css 2>&1 | head -5)",
+      "WebFetch(domain:localhost)",
+      "Bash(curl -s http://localhost:3000/api/collectpure-bid 2>&1 | head -5)",
+      "Bash(curl -s http://localhost:3000/api/calculate 2>&1 | head -5)",
+      "Bash(curl -s http://localhost:3000/health)",
+      "Bash(curl -s http://localhost:3000/api/costco-price)",
+      "Bash(cd /Users/chris/Gold-Flip-Monitor/backend && npm install puppeteer puppeteer-extra puppeteer-extra-plugin-stealth)",
+      "Bash(curl -s http://localhost:3000/api/settings | python3 -m json.tool)",
+      "Bash(node -e \"\nimport { getCostcoPrice } from './scraper.js';\ntry {\n  const result = await getCostcoPrice\\(\\);\n  console.log\\(JSON.stringify\\(result, null, 2\\)\\);\n} catch\\(e\\) {\n  console.error\\('ERROR:', e.message\\);\n}\n\")",
+      "Bash(node debug-costco.js 2>&1)",
+      "Bash(curl -s -X POST http://localhost:3000/api/settings -H 'Content-Type: application/json' -d '{\"costcoEmail\":\"cbranchen@gmail.com\",\"costcoPassword\":\"Pens!174\"}' | python3 -m json.tool)",
+      "Bash(curl -s -X POST http://localhost:3000/api/settings -H 'Content-Type: application/json' -d '{\"costcoEmail\":\"cbranchen@gmail.com\",\"costcoPassword\":\"Pens!174\"}')",
+      "Bash(curl -s -X POST http://localhost:3000/api/settings -H 'Content-Type: application/json' --data-raw '{\"costcoEmail\":\"cbranchen@gmail.com\",\"costcoPassword\":\"Pens!174\"}')",
+      "Bash(pkill -f \"remote-debugging-port=9333\" 2>/dev/null; sleep 1; curl -s http://localhost:3000/api/costco-price 2>&1)",
+      "Bash(lsof -ti :3000 2>/dev/null)",
+      "Bash(curl -s http://localhost:3000/api/calculate 2>&1)",
+      "Bash(curl -s http://localhost:3000/api/settings 2>&1)",
+      "Bash(rm /Users/chris/Gold-Flip-Monitor/backend/debug-costco.js && npm uninstall puppeteer puppeteer-extra puppeteer-extra-plugin-stealth 2>&1)",
+      "Bash(npm install puppeteer-core)",
+      "Bash(lsof -ti :5173 2>/dev/null && echo \"Frontend running\" || echo \"Frontend not running\")",
+      "Bash(curl -d \"Gold Flip Monitor is live!\" ntfy.sh/gold-flip)",
+      "Bash(git init && git add -A && git status)"
+    ]
+  }
+}

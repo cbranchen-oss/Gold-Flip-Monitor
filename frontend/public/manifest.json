@@ -1,0 +1,62 @@
+{
+  "name": "Gold Flip Monitor",
+  "short_name": "Gold Flip",
+  "description": "Costco to CollectPure profit calculator with real-time bid tracking",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#d97706",
+  "background_color": "#0f172a",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23d97706' width='192' height='192'/><text y='96' x='96' text-anchor='middle' dominant-baseline='middle' font-size='140' fill='white'>🪙</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%23d97706' width='512' height='512'/><text y='256' x='256' text-anchor='middle' dominant-baseline='middle' font-size='380' fill='white'>🪙</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'><rect fill='%230f172a' width='540' height='720'/><rect fill='%23d97706' width='540' height='120'/><text y='60' x='270' text-anchor='middle' dominant-baseline='middle' font-size='48' fill='white' font-weight='bold'>Gold Flip Monitor</text></svg>",
+      "sizes": "540x720",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    }
+  ],
+  "categories": ["finance", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Calculate Profit",
+      "short_name": "Calculate",
+      "description": "Quick profit/loss calculator",
+      "url": "/?tab=calculator",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23d97706' width='192' height='192'/><text y='96' x='96' text-anchor='middle' dominant-baseline='middle' font-size='140' fill='white'>🪙</text></svg>",
+          "sizes": "192x192",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Settings",
+      "short_name": "Settings",
+      "description": "Configure notification thresholds",
+      "url": "/?tab=settings",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23d97706' width='192' height='192'/><text y='96' x='96' text-anchor='middle' dominant-baseline='middle' font-size='140' fill='white'>⚙️</text></svg>",
+          "sizes": "192x192",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ]
+}

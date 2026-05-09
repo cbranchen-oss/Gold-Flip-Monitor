@@ -1,0 +1,9 @@
+[phases.setup]
+nixPkgs = ["chromium", "nss", "freetype", "harfbuzz", "ca-certificates", "fonts-liberation"]
+
+[phases.install]
+cmds = ["npm ci"]
+
+[variables]
+PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "false"
+NODE_ENV = "production"
