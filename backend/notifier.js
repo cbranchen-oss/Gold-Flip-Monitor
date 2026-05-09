@@ -1,37 +1,31 @@
-export async function sendNotification(topic, titleOrProfitLoss, costcoPrice, bidPrice, netPayout, type = 'profit') {
+function formatPrice(n) {
+  return Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+export async function sendNotification(topic, data, costcoPrice, bidPrice, netPayout, type = 'profit') {
   try {
     let title, body, priority, tags;
 
     if (type === 'profit') {
-      // Original profit/loss notification
-      const lossPercent = titleOrProfitLoss.toFixed(2);
-      title = '🪙 Gold Flip Alert';
-      body = `Loss is only ${lossPercent}%!\nCostco: $${costcoPrice.toLocaleString()}\nPure bid: $${bidPrice.toLocaleString()}\nNet payout: $${netPayout.toLocaleString()}`;
+      const lossPercent = data.toFixed(2);
+      title = '🪙 Gold Flip Alert!';
+      body = `Loss is only ${lossPercent}%!\nCostco: $${formatPrice(costcoPrice)}\nCollectPure Bid: $${formatPrice(bidPrice)}\nNet Payout: $${formatPrice(netPayout)}`;
       priority = 'high';
-      tags = ['moneybag'];
+      tags = 'moneybag';
     } else if (type === 'price_change') {
-      // Price change notification
+      const { oldPrice, newPrice, bidPrice: bid, profitLossPercent } = data;
       title = '🪙 Costco Price Changed';
-      body = titleOrProfitLoss; // This is the message
+      body = `Old: $${formatPrice(oldPrice)} → New: $${formatPrice(newPrice)}\nCollectPure Bid: $${formatPrice(bid)}\nFlip Loss: ${profitLossPercent.toFixed(2)}%`;
       priority = 'default';
-      tags = ['chart_with_upwards_trend'];
+      tags = 'chart_with_upwards_trend';
     } else if (type === 'warning') {
-      // Warning notification (like cookie expired)
-      title = '⚠️ ' + titleOrProfitLoss; // titleOrProfitLoss is the title
-      body = costcoPrice; // costcoPrice is actually the message
+      title = '⚠️ ' + data;
+      body = costcoPrice; // costcoPrice is actually the message for warnings
       priority = 'high';
-      tags = ['warning'];
+      tags = 'warning';
     } else {
       throw new Error(`Unknown notification type: ${type}`);
     }
-
-    const payload = {
-      title,
-      message: body,
-      priority,
-      tags,
-      click: 'https://gold-flip-monitor.vercel.app'
-    };
 
     const url = `https://ntfy.sh/${encodeURIComponent(topic)}`;
     console.log('Sending notification to ntfy:', url);
@@ -39,9 +33,12 @@ export async function sendNotification(topic, titleOrProfitLoss, costcoPrice, bi
     const response = await fetch(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Title': title,
+        'Priority': priority,
+        'Tags': tags,
+        'Click': 'https://gold-flip-monitor.vercel.app'
       },
-      body: JSON.stringify(payload)
+      body
     });
 
     if (!response.ok) {

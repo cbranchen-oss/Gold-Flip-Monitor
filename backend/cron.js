@@ -64,8 +64,8 @@ export function startCronJob() {
         console.log('Sending notification (Costco price changed)');
         await sendNotification(
           settings.nftTopic,
-          'Costco Price Changed',
-          `Costco price updated: $${oldCostcoPrice} → $${costcoPrice}\nNew profit/loss: ${profitLossPercent.toFixed(2)}%`,
+          { oldPrice: oldCostcoPrice, newPrice: costcoPrice, bidPrice, profitLossPercent },
+          null,
           null,
           null,
           'price_change'
