@@ -259,32 +259,34 @@ async function scrapeProductPrice(page) {
   });
   await new Promise(r => setTimeout(r, 5000));
 
+  // Check for Akamai block
+  const pageTitle = await page.title();
+  if (pageTitle.toLowerCase().includes('access denied')) {
+    throw new Error('Akamai blocked access to the product page');
+  }
+
   // Step 4: Extract price
+  // Costco renders price as: <span automation-id="productPriceOutput">4,769.99</span><span class="currency">$</span>
+  // The dollar sign is separate, so we extract just the numeric value from the price element.
   const priceText = await page.evaluate(() => {
     const el = document.querySelector('[automation-id="productPriceOutput"]');
-    if (el) return el.textContent.trim();
-
-    const yourPrice = document.querySelector('.your-price');
-    if (yourPrice) {
-      const match = yourPrice.textContent.match(/[\d,]+\.\d{2}/);
-      if (match) return match[0];
+    if (el) {
+      const m = el.textContent.trim().match(/([\d,]+\.\d{2})/);
+      if (m) return m[1];
     }
-
-    const allText = document.body.innerText;
-    const match = allText.match(/([\d,]{4,}\.\d{2})/);
-    if (match) return match[1];
-
     return null;
   });
 
   if (!priceText) {
     const pageTitle = await page.title();
+    const snippet = await page.evaluate(() => document.body.innerText.substring(0, 500));
+    console.error('Page snippet:', snippet);
     throw new Error(`Could not extract price (page: "${pageTitle}")`);
   }
 
   const price = parseFloat(priceText.replace(/[,$]/g, ''));
-  if (isNaN(price) || price < 100) {
-    throw new Error(`Invalid price extracted: "${priceText}"`);
+  if (isNaN(price) || price < 1000 || price > 20000) {
+    throw new Error(`Price out of expected range ($1,000-$20,000): "${priceText}" → ${price}`);
   }
 
   console.log('Found Costco price:', price);
