@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 export default function Settings() {
   const [platformFee, setPlatformFee] = useState(0.70);
   const [threshold, setThreshold] = useState(-2.0);
-  const [topic, setTopic] = useState('gold-flip');
   const [costcoEmail, setCostcoEmail] = useState('');
   const [costcoPassword, setCostcoPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -21,7 +20,6 @@ export default function Settings() {
       const data = await res.json();
       setPlatformFee(data.platformFee || 0.70);
       setThreshold(data.notificationThreshold || -2.0);
-      setTopic(data.nftTopic || 'gold-flip');
       setCostcoEmail(data.costcoEmail || '');
       setCostcoPassword(data.costcoPassword || '');
     } catch (err) {
@@ -35,7 +33,6 @@ export default function Settings() {
       const body = {
         platformFee: parseFloat(platformFee),
         notificationThreshold: parseFloat(threshold),
-        nftTopic: topic,
         costcoEmail: costcoEmail
       };
       // Only send password if user typed a new one (not the redacted placeholder)
@@ -120,20 +117,6 @@ export default function Settings() {
             onChange={(e) => setCostcoPassword(e.target.value)}
             placeholder="Enter password"
             autoComplete="off"
-          />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="topic">
-            ntfy.sh Topic Name
-            <span className="help">Private topic for notifications</span>
-          </label>
-          <input
-            id="topic"
-            type="text"
-            value={topic}
-            onChange={(e) => setTopic(e.target.value)}
-            placeholder="e.g., gold-flip"
           />
         </div>
 

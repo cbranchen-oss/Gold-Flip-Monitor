@@ -1,49 +1,44 @@
+import { spawn } from 'child_process';
+
+const NOTIFY_SCRIPT = '/Users/chris/telegram-bot/notify.py';
+
 function formatPrice(n) {
   return Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-export async function sendNotification(topic, data, costcoPrice, bidPrice, netPayout, type = 'profit') {
+export async function sendNotification(data, costcoPrice, bidPrice, netPayout, type = 'profit') {
   try {
-    let title, body, priority, tags;
+    let message;
 
     if (type === 'profit') {
       const lossPercent = data.toFixed(2);
-      title = '🪙 Gold Flip Alert!';
-      body = `Loss is only ${lossPercent}%!\nCostco: $${formatPrice(costcoPrice)}\nCollectPure Bid: $${formatPrice(bidPrice)}\nNet Payout: $${formatPrice(netPayout)}`;
-      priority = 'high';
-      tags = 'moneybag';
+      message = `🪙 Gold Flip Alert!\nLoss is only ${lossPercent}%!\nCostco: $${formatPrice(costcoPrice)}\nCollectPure Bid: $${formatPrice(bidPrice)}\nNet Payout: $${formatPrice(netPayout)}`;
     } else if (type === 'price_change') {
       const { oldPrice, newPrice, bidPrice: bid, profitLossPercent } = data;
-      title = '🪙 Costco Price Changed';
-      body = `Old: $${formatPrice(oldPrice)} → New: $${formatPrice(newPrice)}\nCollectPure Bid: $${formatPrice(bid)}\nFlip Loss: ${profitLossPercent.toFixed(2)}%`;
-      priority = 'default';
-      tags = 'chart_with_upwards_trend';
+      message = `🪙 Costco Price Changed\nOld: $${formatPrice(oldPrice)} → New: $${formatPrice(newPrice)}\nCollectPure Bid: $${formatPrice(bid)}\nFlip Loss: ${profitLossPercent.toFixed(2)}%`;
     } else if (type === 'warning') {
-      title = '⚠️ ' + data;
-      body = costcoPrice; // costcoPrice is actually the message for warnings
-      priority = 'high';
-      tags = 'warning';
+      message = `⚠️ ${data}\n${costcoPrice}`;
     } else {
       throw new Error(`Unknown notification type: ${type}`);
     }
 
-    const url = `https://ntfy.sh/${encodeURIComponent(topic)}`;
-    console.log('Sending notification to ntfy:', url);
+    console.log('Sending Telegram notification...');
 
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Title': title,
-        'Priority': priority,
-        'Tags': tags,
-        'Click': 'https://gold-flip-monitor.vercel.app'
-      },
-      body
+    await new Promise((resolve, reject) => {
+      const child = spawn('python3', [NOTIFY_SCRIPT, message]);
+      let stderr = '';
+      child.stdout.on('data', (data) => console.log('notify.py:', data.toString().trim()));
+      child.stderr.on('data', (data) => { stderr += data.toString(); });
+      child.on('close', (code) => {
+        if (code !== 0) {
+          reject(new Error(`notify.py exited with code ${code}: ${stderr}`));
+        } else {
+          if (stderr) console.warn('notify.py stderr:', stderr);
+          resolve();
+        }
+      });
+      child.on('error', reject);
     });
-
-    if (!response.ok) {
-      throw new Error(`ntfy returned status ${response.status}`);
-    }
 
     console.log('Notification sent successfully');
     return { success: true, timestamp: new Date().toISOString() };

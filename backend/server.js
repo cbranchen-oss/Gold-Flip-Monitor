@@ -86,12 +86,11 @@ app.get('/api/settings', (req, res) => {
 
 // Update settings
 app.post('/api/settings', (req, res) => {
-  const { platformFee, notificationThreshold, nftTopic, costcoEmail, costcoPassword } = req.body;
+  const { platformFee, notificationThreshold, costcoEmail, costcoPassword } = req.body;
   const updates = {};
 
   if (typeof platformFee === 'number') updates.platformFee = platformFee;
   if (typeof notificationThreshold === 'number') updates.notificationThreshold = notificationThreshold;
-  if (typeof nftTopic === 'string') updates.nftTopic = nftTopic;
   if (typeof costcoEmail === 'string') updates.costcoEmail = costcoEmail;
   if (typeof costcoPassword === 'string') updates.costcoPassword = costcoPassword;
 

@@ -33,7 +33,7 @@ function App() {
 
       <footer className="app-footer">
         <p>
-          Powered by <strong>ntfy.sh</strong> for notifications
+          Powered by <strong>Telegram</strong> for notifications
         </p>
         <p className="version">v1.0.0</p>
       </footer>

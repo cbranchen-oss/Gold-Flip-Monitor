@@ -19,7 +19,6 @@ if (!fs.existsSync(dataDir)) {
 const defaultSettings = {
   platformFee: parseFloat(process.env.PLATFORM_FEE) || 0.70,
   notificationThreshold: parseFloat(process.env.NOTIFICATION_THRESHOLD) || -2.0,
-  nftTopic: process.env.NTFY_TOPIC || 'gold-flip',
   costcoEmail: process.env.COSTCO_EMAIL || '',
   costcoPassword: process.env.COSTCO_PASSWORD || ''
 };

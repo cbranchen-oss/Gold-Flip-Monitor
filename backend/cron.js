@@ -63,7 +63,6 @@ export function startCronJob() {
       if (costcoPriceChanged) {
         console.log('Sending notification (Costco price changed)');
         await sendNotification(
-          settings.nftTopic,
           { oldPrice: oldCostcoPrice, newPrice: costcoPrice, bidPrice, profitLossPercent },
           null,
           null,
@@ -79,7 +78,6 @@ export function startCronJob() {
       if (shouldNotify) {
         console.log('Sending notification (loss is better than threshold)');
         await sendNotification(
-          settings.nftTopic,
           profitLossPercent,
           costcoPrice,
           bidPrice,
